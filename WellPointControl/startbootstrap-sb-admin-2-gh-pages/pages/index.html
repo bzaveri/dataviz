@@ -286,6 +286,7 @@
                         <li>
                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
+                        <!--
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Server Status<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -296,8 +297,8 @@
                                     <a href="morris.html">Morris.js Charts</a>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
                         </li>
+                        -->
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
@@ -357,30 +358,6 @@
                         </a>
                     </div>
                 </div>
-                <!--
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-red">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-support fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">13</div>
-                                    <div>Support Tickets!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                -->
             </div>
             <!-- /.row -->
             <div class="row">
@@ -406,10 +383,11 @@
                         <tr>
                             <th>Crew</th>
                             <th>Job Name</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
                             <th>Pressure</th>
                             <th>Temperature</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Duration</th>
                             <th>System Panel Link</th>
                         </tr>
                     </thead>
@@ -417,8 +395,6 @@
                         <tr class="odd gradeX">
                             <td>STX1</td>
                             <td><a href="job_level.html">Davila Unit6H Marathon Oil</a></td>
-                            <td>10/28/2016</td>
-                            <td>11/8/2016</td>
                             <td>
                                 <span id="press-log1"></span>984<span>mb</span>
                             </td>
@@ -432,13 +408,14 @@
                                     </table>
                                 </div>
                             </td>
+                            <td>10/28/2016</td>
+                            <td>11/8/2016</td>
+                            <td>11 days</td>
                             <td><button type="button" class="btn btn-primary btn-sm">Connect</button></td>
                         </tr>
                         <tr class="even gradeC">
                             <td>STX2</td>
-                            <td>Gallo Rojo Tillie A1H Petrohawk</td>
-                            <td>10/24/2016</td>
-                            <td>11/8/2016</td>
+                            <td><a href="job_level.html">Gallo Rojo Tillie A1H Petrohawk</a></td>
                             <td>
                                 <div class="demo-section k-content">
                                     <div class="climate">
@@ -461,13 +438,14 @@
                                     </table>
                                 </div>
                             </td>
+                            <td>10/24/2016</td>
+                            <td>11/8/2016</td>
+                            <td>15 days</td>
                             <td><button type="button" class="btn btn-primary btn-sm">Connect</button></td>
                         </tr>
                         <tr class="odd gradeA">
                             <td>STX3</td>
-                            <td>Rogers SA Chesapeake Operating</td>
-                            <td>10/25/2016</td>
-                            <td>11/8/2016</td>
+                            <td><a href="job_level.html">Rogers SA Chesapeake Operating</a></td>
                             <td>
                                 <div class="demo-section k-content">
                                     <div class="climate">
@@ -490,13 +468,14 @@
                                     </table>
                                 </div>
                             </td>
+                            <td>10/25/2016</td>
+                            <td>11/8/2016</td>
+                            <td>14 days</td>
                             <td><button type="button" class="btn btn-primary btn-sm">Connect</button></td>
                         </tr>
                         <tr class="odd gradeA">
                             <td>STX4</td>
-                            <td>Franks 17-8HC 1 Alt Aethon</td>
-                            <td>11/4/2016</td>
-                            <td>11/8/2016</td>
+                            <td><a href="job_level.html">Franks 17-8HC 1 Alt Aethon</a></td>
                             <td>
                                 <div class="demo-section k-content">
                                     <div class="climate">
@@ -519,13 +498,14 @@
                                     </table>
                                 </div>
                             </td>
+                            <td>11/4/2016</td>
+                            <td>11/8/2016</td>
+                            <td>4 days</td>
                             <td><button type="button" class="btn btn-primary btn-sm">Connect</button></td>
                         </tr>
                         <tr class="odd gradeA">
                             <td>STX5</td>
-                            <td>Rayes B-GWOSDZ A SA1H Petrohawk Energy Corporation</td>
-                            <td>10/21/2016</td>
-                            <td>10/29/2016</td>
+                            <td><a href="job_level.html">Rayes B-GWOSDZ A SA1H Petrohawk Energy Corporation</a></td>
                             <td>
                                 <div class="demo-section k-content">
                                     <div class="climate">
@@ -548,13 +528,14 @@
                                     </table>
                                 </div>
                             </td>
+                            <td>10/21/2016</td>
+                            <td>10/29/2016</td>
+                            <td>8 days</td>
                             <td><button type="button" class="btn btn-primary btn-sm">Connect</button></td>
                         </tr>
                         <tr class="odd gradeA">
                             <td>STX5</td>
-                            <td>Rayes B-GEFFERT A A1H Petrohawk Energy Corporation</td>
-                            <td>10/25/2016</td>
-                            <td>11/8/2016</td>
+                            <td><a href="job_level.html">Rayes B-GEFFERT A A1H Petrohawk Energy Corporation</a></td>
                             <td>
                                 <div class="demo-section k-content">
                                     <div class="climate">
@@ -577,6 +558,9 @@
                                     </table>
                                 </div>
                             </td>
+                            <td>10/25/2016</td>
+                            <td>11/8/2016</td>
+                            <td>14 days</td>
                             <td><button type="button" class="btn btn-primary btn-sm">Connect</button></td>
                         </tr>
                     </tbody>
