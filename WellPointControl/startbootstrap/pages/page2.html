@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--<base href="http://demos.telerik.com/kendo-ui/scheduler/resources-grouping-vertical">-->
+    <style>
+        html { font-size: 14px; font-family: Helvetica, Arial, sans-serif; }
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        h6 {
+            #font-size: xx-small;
+            #font-weight: normal;
+            font-size: 12px;
+            height:0px;
+        }
+
+        .eventStyle {
+            cursor: pointer; 
+            cursor: hand;
+            #text-align:center;
+        }
+
+        #vertical {
+            height: 500px;
+            margin: 0 auto;
+        }
+
+        #middle-pane { background-color: rgba(60, 70, 80, 0.10); }
+        #bottom-pane { background-color: rgba(60, 70, 80, 0.15); }
+        #left-pane, #center-pane, #right-pane  { background-color: rgba(60, 70, 80, 0.05); }
+
+        .pane-content {
+            padding: 0 10px;
+        }
+
+        #example > div > div.header > table, 
+        #example > div > div.header > table > thead > tr, 
+        #example > div > div.header > table > thead > tr > th {    
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        #example > div > div.header > table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #example > div > div.header > table > thead > tr > th {
+            padding: 15px;
+            text-align: center;
+        }
+
+
+    </style>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Wellsite Process Control</title>
+
+    <link href="../styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="../styles/kendo.rtl.min.css" rel="stylesheet" />
+    <link href="../styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="../styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.uniform.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.uniform.mobile.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.common-bootstrap.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.bootstrap.min.css">
+    <link href="../styles/slb.css" rel="stylesheet" />
+
+    
+    <script src="http://cdn.kendostatic.com/2017.1.118/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2017.1.118/js/kendo.all.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2017.1.118/js/kendo.timezones.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    
+
+</head>
+
+<body style="margin:0px">
+    <!-- Navigation -->
+    <div class="table-responsive">
+        <table width="100%" cellspacing="0px" class="header table">
+            <tr class="header_row">
+                <td class="header_company"><a href="index.html"><img src="slb_logo_162x36.png" class="img-responsive"/></a></td>
+                <td class="header_app">
+                    <table width="100%">
+                        <tr>
+                            <td>Wellsite Process Control</td>
+                            <td align="right" style="padding-top: 7px; padding-right: 8px"><img src="btn_dashboard_127x66.png"/></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="example">
+        <div class="demo-section k-content">
+            <div class="header">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                        <th>Well Name</th>
+                        <th>Client Name</th>
+                        <th>Crew Name</th>
+                        <th>District Name</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tabstrip">
+                <ul>
+                    <li class="k-state-active">
+                        PRD Graph
+                    </li>
+                    <li>
+                        Equipment Parameters
+                    </li>
+                    <li>
+                        Equipment Status
+                    </li>
+                </ul>
+                <div>
+                    <div id="container2" style="width: 100%; margin: 0 auto"></div>
+                </div>
+                <div>
+                    <div id="example">
+                        <div id="vertical">
+                            <div id="top-pane">
+                                <div id="horizontal" style="height: 100%; width: 100%;">
+                                    <div id="center-pane">
+                                        <div class="pane-content">
+                                            <div id="container3" style="width: 75%;"></div>
+                                        </div>
+                                    </div>
+                                    <div id="left-pane">
+                                        <div class="pane-content">
+                                            <div id="treeview" style="width: 100%" class="k-content panel-collapse"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            $(document).ready(function() {
+                                $("#vertical").kendoSplitter({
+                                    orientation: "vertical",
+                                    panes: [
+                                        //{ collapsible: false },
+                                        //{ collapsible: false, size: "80%" },
+                                        //{ collapsible: false, resizable: false, size: "20%" }
+                                    ]
+                                });
+
+                                $("#horizontal").kendoSplitter({
+                                    panes: [
+                                        { collapsible: false, size: "80%" },
+                                        { collapsible: true, size: "20%" },
+                                        //{ collapsible: true, size: "80%"}
+                                    ]
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div>
+                    Coming Soon. Equipment Status.
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .sunny, .cloudy, .rainy {
+                display: block;
+                margin: 30px auto 10px;
+                width: 128px;
+                height: 128px;
+                background: url('../content/web/tabstrip/weather.png') transparent no-repeat 0 0;
+            }
+
+            .cloudy{
+                background-position: -128px 0;
+            }
+
+            .rainy{
+                background-position: -256px 0;
+            }
+
+            .weather {
+                margin: 0 auto 30px;
+                text-align: center;
+            }
+
+            #tabstrip h2 {
+                font-weight: lighter;
+                font-size: 5em;
+                line-height: 1;
+                padding: 0 0 0 30px;
+                margin: 0;
+            }
+
+            #tabstrip h2 span {
+                background: none;
+                padding-left: 5px;
+                font-size: .3em;
+                vertical-align: top;
+            }
+
+            #tabstrip p {
+                margin: 0;
+                padding: 0;
+            }
+
+            .k-splitter .k-ghost-splitbar-horizontal,
+            .k-splitter .k-splitbar-horizontal
+            {
+                top: 0;
+                width: 5px;
+                border-width: 0 1px;
+                background-repeat: repeat-y;
+            }
+        </style>
+
+        <script>
+            $(document).ready(function() {
+                $("#tabstrip").kendoTabStrip({
+                    animation:  {
+                        open: {
+                            effects: "fadeIn"
+                        }
+                    }
+                });
+            });
+        </script>
+
+        <script>
+        $(function () {
+            Highcharts.chart('container2', {
+                chart: {
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: 'Pressure/Rate/Concentration'
+                },
+                subtitle: {
+                    //text: 'Source: WorldClimate.com'
+                },
+                xAxis: [{
+                    categories: ['2016-11-01', '2016-11-02 ', '2016-11-03', '2016-11-04', '2016-11-05', '2016-11-06',
+                        '2016-11-07', '2016-11-08', '2016-11-09', '2016-11-10', '2016-11-11', '2016-11-12', '2016-11-13', '2016-11-14', '2016-11-15', '2016-11-16', '2016-11-17', '2016-11-18', '2016-11-19', '2016-11-20', '2016-11-21', '2016-11-22', '2016-11-23', '2016-11-24', '2016-11-25', '2016-11-26', '2016-11-27', '2016-11-28', '2016-11-29', '2016-11-30', '2016-11-31'],
+                    crosshair: true
+                }],
+                yAxis: [{ // Primary yAxis
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: '#73c100'
+                        }
+                    },
+                    title: {
+                        text: 'Concentration',
+                        style: {
+                            color: '#73c100'
+                        }
+                    },
+                    opposite: true
+
+                }, { // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'Rate',
+                        style: {
+                            color: '#ffae00'
+                        }
+                    },
+                    labels: {
+                        format: '{value} gpm',
+                        style: {
+                            color: '#ffae00'
+                        }
+                    }
+
+                }, { // Tertiary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'Pressure',
+                        style: {
+                            color: '#ff1c1c'
+                        }
+                    },
+                    labels: {
+                        format: '{value} psi',
+                        style: {
+                            color: '#ff1c1c'
+                        }
+                    },
+                    opposite: true
+                }],
+                tooltip: {
+                    shared: true
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'left',
+                    x: 80,
+                    verticalAlign: 'top',
+                    y: 55,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                },
+                series: [{
+                    name: 'Rate',
+                    type: 'line',
+                    yAxis: 1,
+                    data: [49.9, 71.5, 106.4, 129.2, 144.0, 144.0, 144.6, 144.5, 144.4, 144.1, 
+                            150.6, 150.4, 150.4, 150.2, 160.0, 160.0, 160.6, 160.5, 160.4, 170.1,
+                            170.6, 170.4, 170.4, 170.2, 170.0, 165.0, 165.6, 165.5, 165.4, 165.1],
+                    tooltip: {
+                        valueSuffix: ' gpm'
+                    },
+                    dashStyle: 'line',
+                    marker: {
+                        enabled: false
+                    },
+                    color: '#ffae00'
+                }, {
+                    name: 'Pressure',
+                    type: 'line',
+                    yAxis: 2,
+                    data: [1016, 1017, 1018.9, 1020.5, 1025.3, 1025.5, 1025.6, 1025.2, 1025.1, 1025.9, 
+                    1020.2, 1020.7, 1020.9, 1020.5, 1020.3, 1020.5, 1030.6, 1030.2, 1030.1, 1030.9,
+                    1025.2, 1025.7, 1025.9, 1025.5, 1025.3, 1025.5, 1020.6, 1020.2, 1020.1, 1020.9],
+                    marker: {
+                        enabled: false,
+                        visible: false
+                    },
+                    dashStyle: 'line',
+                    tooltip: {
+                        valueSuffix: ' psi'
+                    },
+                    color: '#ff1c1c'
+
+                }, {
+                    name: 'Concentration',
+                    type: 'line',
+                    data: [80.0, 81.9, 82.5, 83.5, 80.2, 100.5, 110.2, 115.5, 100.3, 112.3, 
+                    118.9, 120.6, 82.5, 83.5, 80.2, 100.5, 110.2, 115.5, 100.3, 112.3,
+                    118.9, 120.6, 82.5, 83.5, 80.2, 100.5, 110.2, 115.5, 100.3, 112.3],
+                    tooltip: {
+                        valueSuffix: ' '
+                    },
+                    marker: {
+                        enabled: false,
+                        visible: false
+                    },
+                    color: '#73c100'
+                }]
+            });
+        });
+
+         $(function () {
+            Highcharts.chart('container3', {
+                chart: {
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: 'Pressure/Rate/Concentration'
+                },
+                subtitle: {
+                    //text: 'Source: WorldClimate.com'
+                },
+                xAxis: [{
+                    categories: ['2016-11-01', '2016-11-02 ', '2016-11-03', '2016-11-04', '2016-11-05', '2016-11-06',
+                        '2016-11-07', '2016-11-08', '2016-11-09', '2016-11-10', '2016-11-11', '2016-11-12', '2016-11-13', '2016-11-14', '2016-11-15', '2016-11-16', '2016-11-17', '2016-11-18', '2016-11-19', '2016-11-20', '2016-11-21', '2016-11-22', '2016-11-23', '2016-11-24', '2016-11-25', '2016-11-26', '2016-11-27', '2016-11-28', '2016-11-29', '2016-11-30', '2016-11-31'],
+                    crosshair: true
+                }],
+                yAxis: [{ // Primary yAxis
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: '#73c100'
+                        }
+                    },
+                    title: {
+                        text: 'Concentration',
+                        style: {
+                            color: '#73c100'
+                        }
+                    },
+                    opposite: true
+
+                }, { // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'Rate',
+                        style: {
+                            color: '#ffae00'
+                        }
+                    },
+                    labels: {
+                        format: '{value} gpm',
+                        style: {
+                            color: '#ffae00'
+                        }
+                    }
+
+                }, { // Tertiary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'Pressure',
+                        style: {
+                            color: '#ff1c1c'
+                        }
+                    },
+                    labels: {
+                        format: '{value} psi',
+                        style: {
+                            color: '#ff1c1c'
+                        }
+                    },
+                    opposite: true
+                }],
+                tooltip: {
+                    shared: true
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'left',
+                    x: 80,
+                    verticalAlign: 'top',
+                    y: 55,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                },
+                series: [{
+                    name: 'Rate',
+                    type: 'line',
+                    yAxis: 1,
+                    data: [49.9, 71.5, 106.4, 129.2, 144.0, 144.0, 144.6, 144.5, 144.4, 144.1, 
+                            150.6, 150.4, 150.4, 150.2, 160.0, 160.0, 160.6, 160.5, 160.4, 170.1,
+                            170.6, 170.4, 170.4, 170.2, 170.0, 165.0, 165.6, 165.5, 165.4, 165.1],
+                    tooltip: {
+                        valueSuffix: ' gpm'
+                    },
+                    dashStyle: 'line',
+                    marker: {
+                        enabled: false
+                    },
+                    color: '#ffae00'
+                }, {
+                    name: 'Pressure',
+                    type: 'line',
+                    yAxis: 2,
+                    data: [1016, 1017, 1018.9, 1020.5, 1025.3, 1025.5, 1025.6, 1025.2, 1025.1, 1025.9, 
+                    1020.2, 1020.7, 1020.9, 1020.5, 1020.3, 1020.5, 1030.6, 1030.2, 1030.1, 1030.9,
+                    1025.2, 1025.7, 1025.9, 1025.5, 1025.3, 1025.5, 1020.6, 1020.2, 1020.1, 1020.9],
+                    marker: {
+                        enabled: false,
+                        visible: false
+                    },
+                    dashStyle: 'line',
+                    tooltip: {
+                        valueSuffix: ' psi'
+                    },
+                    color: '#ff1c1c'
+
+                }, {
+                    name: 'Concentration',
+                    type: 'line',
+                    data: [80.0, 81.9, 82.5, 83.5, 80.2, 100.5, 110.2, 115.5, 100.3, 112.3, 
+                    118.9, 120.6, 82.5, 83.5, 80.2, 100.5, 110.2, 115.5, 100.3, 112.3,
+                    118.9, 120.6, 82.5, 83.5, 80.2, 100.5, 110.2, 115.5, 100.3, 112.3],
+                    tooltip: {
+                        valueSuffix: ' '
+                    },
+                    marker: {
+                        enabled: false,
+                        visible: false
+                    },
+                    color: '#73c100'
+                }]
+            });
+        });
+        </script>
+
+        <script>
+            $("#treeview").kendoTreeView({
+                checkboxes: {
+                    checkChildren: true
+                },
+
+                check: onCheck,
+
+                dataSource: [{
+                    id: "1", text: "Job Equipment", expanded: true, spriteCssClass: "rootfolder", items: [
+                        {
+                            id: "2", text: "CCC", expanded: true, spriteCssClass: "folder", items: [
+                                { id: "3", text: "000BAB9EEE29", spriteCssClass: "html" }
+                            ]
+                        },
+                        {
+                            id: "6", text: "FracCAT", expanded: true, spriteCssClass: "folder", items: [
+                                { id: "7", text: "000BAB8355A5", spriteCssClass: "image" }
+                            ]
+                        },
+                        {
+                            id: "9", text: "Pump", expanded: true, spriteCssClass: "folder", items: [
+                                { 
+                                    id: "10", text: "2SPF29890", spriteCssClass: "pdf", items: [
+                                        {id: "10.1", text: "ASD"},
+                                        {
+                                            id: "10.2", text: "Engine", items: [
+                                                {id: "10.2.1", text: "Discharge Pressure"},
+                                                {id: "10.2.1", text: "ECT Temperature Maximum"}
+                                            ]
+                                        },
+                                        {id: "10.3", text: "Fluid End"},
+                                        {id: "10.4", text: "Other"},
+                                        {id: "10.5", text: "Power End"},
+                                        {id: "10.6", text: "Summary"}
+                                    ] 
+                                },
+                                { 
+                                    id: "11", text: "2SPF33477", spriteCssClass: "pdf", items: [
+                                        {id: "11.1", text: "ASD"},
+                                        {id: "11.2", text: "Engine"},
+                                        {id: "11.3", text: "Fluid End"},
+                                        {id: "11.4", text: "Other"},
+                                        {id: "11.5", text: "Power End"},
+                                        {id: "11.6", text: "Summary"}
+                                    ]
+                                },
+                                { id: "12", text: "2SPF34361", spriteCssClass: "pdf" },
+                                { id: "13", text: "2SPF34361", spriteCssClass: "pdf" },
+                                { id: "14", text: "2SPF34361", spriteCssClass: "pdf" },
+                                { id: "15", text: "2SPF34361", spriteCssClass: "pdf" },
+                                { id: "16", text: "2SPF34361", spriteCssClass: "pdf" },
+                                { id: "17", text: "2SPF34361", spriteCssClass: "pdf" },
+                                { id: "18", text: "2SPF34361", spriteCssClass: "pdf" }
+                            ]
+                        }
+                    ]
+                }]
+            });
+
+            // function that gathers IDs of checked nodes
+            function checkedNodeIds(nodes, checkedNodes) {
+                for (var i = 0; i < nodes.length; i++) {
+                    if (nodes[i].checked) {
+                        checkedNodes.push(nodes[i].id);
+                    }
+
+                    if (nodes[i].hasChildren) {
+                        checkedNodeIds(nodes[i].children.view(), checkedNodes);
+                    }
+                }
+            }
+
+            // show checked node IDs on datasource change
+            function onCheck() {
+                var checkedNodes = [],
+                    treeView = $("#treeview").data("kendoTreeView"),
+                    message;
+
+                checkedNodeIds(treeView.dataSource.view(), checkedNodes);
+
+                if (checkedNodes.length > 0) {
+                    message = "IDs of checked nodes: " + checkedNodes.join(",");
+                } else {
+                    message = "No nodes checked.";
+                }
+
+                $("#result").html(message);
+            }
+
+            $("#filterText").keyup(function (e) {
+                var filterText = $(this).val();
+
+                if (filterText !== "") {
+                    $(".selectAll").css("visibility", "hidden");
+                    $("#treeview .k-group .k-group .k-in").closest("li").hide();
+                    $("#treeview .k-group .k-group .k-in:contains(" + filterText + ")").each(function () {
+                        $(this).parents("ul, li").each(function () {
+                            $(this).show();
+                        });
+                    });
+                }
+                else {
+                    $("#treeview .k-group").find("li").show();
+                    $(".selectAll").css("visibility", "visible");
+                }
+            });
+        </script>
+    </div>
+    </body>
+</html>

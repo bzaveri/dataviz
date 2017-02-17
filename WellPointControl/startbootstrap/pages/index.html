@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--<base href="http://demos.telerik.com/kendo-ui/scheduler/resources-grouping-vertical">-->
+    <style>
+        html { font-size: 14px; font-family: Helvetica, Arial, sans-serif; }
+        #scheduler > div
+        {
+            /* make them invisible */
+            #display: none;
+         
+            /* prevent height and paddings from influencing the size calculations */
+            #height: 0;
+            #padding: 0;
+            #overflow: hidden;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(1) > td:nth-child(1) > div > table > tbody > tr:nth-child(2),
+        #scheduler > table > tbody > tr:nth-child(1) > td:nth-child(2) > div > div > table > tbody > tr:nth-child(2),
+        .k-scheduler-timelineWeekview > tbody > tr:nth-child(1) .k-scheduler-table tr:nth-child(2) {
+            display: none;
+        }
+        
+        h6 {
+            #font-size: xx-small;
+            #font-weight: normal;
+            font-size: 12px;
+            height:0px;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) {
+            #min-height: 70px;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(1) > div > table {
+            width: 140px;
+        }
+
+
+
+        .crewName {
+            #font-size: 26px;
+            cursor: pointer; cursor: hand;
+        }
+
+        .calendar-header1 {
+            font-size: 10px;
+        }
+
+        .calendar-header2 {
+            font-size: 14px;
+        }
+
+        .k-event {
+            border-radius: 0px !important;
+        }
+
+        #scheduler > div > ul > li.k-state-default.k-header.k-nav-today {
+            display: inline-block;
+            vertical-align: middle;
+            background-image: url("btn_regular_250x84.png");
+            font-size:19px;
+            height: 42px;
+            border-radius: 5px !important;
+        }
+
+        #scheduler > div > ul > li.k-state-default.k-header.k-nav-today > a {
+            color: #6bb6ff;
+            padding-top: 7px ;
+            #position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            #height: 100%;
+        }
+
+        .k-state-default.k-header.k-nav-prev {
+            display: inline-block;
+            vertical-align: middle;
+            height: 42px;
+            width: 63.5px;
+            background-image: url("btn_back_127x84.png");
+            background-repeat: no-repeat;
+            border-radius: 5px !important;
+        }
+
+        #scheduler > div > ul > li.k-state-default.k-header.k-nav-prev > a > span {
+            color: #6bb6ff;
+        }
+
+        .k-state-default.k-header.k-nav-next {
+            display: inline-block;
+            vertical-align: middle;
+            height: 42px;
+            width: 63.5px;
+            background-image: url("btn_forward_127x84.png");
+            background-repeat: no-repeat;
+            border-radius: 5px !important;
+        }
+
+        .k-floatwrap.k-header.k-scheduler-toolbar {
+            #background-color: #ececec;
+            background-image: none;
+        }
+
+        div.k-scheduler-header-wrap {
+            background-color: #004990;
+            color: #fff;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(1) > td:nth-child(1) > div > table > tbody > tr:nth-child(1) > th {
+            text-align:center;
+            background-color: #004990;
+            color: #fff;
+            #font-size: 25px;
+            height: 32px;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(1) > div > table > tbody > tr:nth-child(n) > th {
+            text-align: left !important;
+            color: #000;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(1) > div > table > tbody > tr:nth-child(even) > th
+        {
+            background-color: #f2f8fe !important;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(1) > div > table > tbody > tr:nth-child(odd) > th,
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(2) > div > table > tbody > tr:nth-child(odd) > td:nth-child(n)
+        {
+            #background-color: #fff !important;
+        }
+
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(2) > div > div.km-scroll-container > table > tbody > tr:nth-child(even),
+        #scheduler > table > tbody > tr:nth-child(2) > td:nth-child(2) > div > table > tbody > tr:nth-child(even)
+        {
+            background-color: #f2f8fe !important;
+        }
+
+        #scheduler > div > ul > li.k-state-default.k-nav-current,
+        #scheduler > div > a {
+            display: none;
+        }
+
+        #scheduler > div > ul > li.k-state-default.k-header.k-nav-today,
+        #scheduler > div > ul > li.k-state-default.k-header.k-nav-prev {
+            margin: 0px 5px 0px 5px;
+        }
+
+        #scheduler > div > ul > li.k-state-default.k-header.k-nav-next {
+            margin: 0px 0px 0px 5px;
+        }
+
+        .eventStyle {
+            cursor: pointer; 
+            cursor: hand;
+            #text-align:center;
+        }
+
+        .k-animation-container,
+        .k-tooltip {
+            background-color: #F5F5F5 !important;
+            border-radius: 0px !important;
+
+        }
+        
+        .k-tooltip-content {
+             background-color: transparent; !important;
+             border-style: hidden !important;
+             color: black;
+        }
+
+    </style>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Wellsite Process Control</title>
+
+    <!-- Bootstrap Core CSS -->
+    <!--<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- MetisMenu CSS -->
+    <!--<link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">-->
+
+    <!-- Custom CSS -->
+    <!--<link href="../dist/css/sb-admin-2.css" rel="stylesheet">-->
+
+    
+    <!-- Custom Fonts -->
+    <!--<link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
+
+    <link href="../styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="../styles/kendo.rtl.min.css" rel="stylesheet" />
+    <link href="../styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="../styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.uniform.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.uniform.mobile.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.common-bootstrap.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.bootstrap.min.css">
+    <link href="../styles/slb.css" rel="stylesheet" />
+
+    
+    
+    
+    <script src="http://cdn.kendostatic.com/2015.2.624/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.2.624/js/kendo.all.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2015.2.624/js/kendo.timezones.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body style="margin:0px">
+    <!-- Navigation -->
+    <div class="table-responsive">
+        <table width="100%" cellspacing="0px" class="header table">
+            <tr class="header_row">
+                <td class="header_company"><img src="slb_logo_162x36.png" class="img-responsive"/></td>
+                <td class="header_app">
+                    <table width="100%">
+                        <tr>
+                            <td>Wellsite Process Control</td>
+                            <td align="right" style="padding-top: 7px; padding-right: 8px"><img src="btn_dashboard_127x66.png"/></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <div>
+            <div class="row">
+                <div id="example">
+                    <div class="demo-section k-content">
+                        <div class="col-md-5" id="scheduler" style="width: 100%; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function customCreateLayoutConfiguration(name, resources, inner) {
+                var resource = resources[0];
+                if (resource) {
+                  var configuration = [];
+
+                  var data = resource.dataSource.view();
+
+                  for (var dataIndex = 0; dataIndex < data.length; dataIndex++) {
+                    var defaultText = kendo.htmlEncode(kendo.getter(resource.dataTextField)(data[dataIndex]));
+                    //var template = kendo.template("<div class='crewName' style='float:left;'>#=data#&nbsp;&nbsp;</div><div id='#=data#press-log' style='float:left;height:35px;width:80px'></div>");
+                    //var template = kendo.template("<div class='crewName' style='float:center;'>#=data#&nbsp;&nbsp;</div><div id='#=data#press-log' style='float:center;height:35px;width:80px'></div>");
+                    var template = kendo.template("#=data#&nbsp;<br/><div id='#=data#press-log' style='height:35px;'></div>");
+                    var obj = {
+                      text: template(defaultText),
+                      className: "k-slot-cell"
+                    };
+                    obj[name] = customCreateLayoutConfiguration(name, resources.slice(1), inner);
+
+                    configuration.push(obj);
+                  }
+                  return configuration;
+                }
+                return inner;
+              }
+
+          //Custom View 
+          (function ($, undefined) {
+            var kendo = window.kendo,
+                ui = kendo.ui,
+                SchedulerTimelineView = ui.TimelineMonthView,
+                extend = $.extend,
+                NS = ".kendoTimelineYearView";
+
+            var SchedulerTimelineYearView = SchedulerTimelineView.extend({
+                _createColumnsLayout: function(resources, inner) {
+                  return customCreateLayoutConfiguration("columns", resources, inner);
+                },
+
+                _createRowsLayout: function(resources, inner) {
+                  return customCreateLayoutConfiguration("rows", resources, inner);
+                },
+
+              nextDate: function() {
+                var start = this.startDate();
+                return new Date(start.getFullYear(), start.getMonth()+1, start.getDate());
+              },
+              previousDate: function() {
+                var start = this.startDate();
+                return new Date(start.getFullYear(), start.getMonth()-1, start.getDate());
+              },
+              calculateDateRange: function() {
+                var selectedDate = this.options.date,
+                    start = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()),
+                    end = new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, selectedDate.getDate()),
+                    dates = [];
+
+                //console.log(selectedDate + ' ' + start + ' ' + end);
+
+                while (start <= end) {
+                  dates.push(start);
+                  start = kendo.date.nextDay(start);
+                }
+                this._render(dates);
+              }
+            })
+
+            //extend UI
+            extend(true, ui, {
+              SchedulerTimelineYearView: SchedulerTimelineYearView
+            });
+
+          })(window.kendo.jQuery);
+
+          Date.daysBetween = function( date1, date2 ) {
+              //Get 1 day in milliseconds
+              var one_day=1000*60*60*24;
+
+              // Convert both dates to milliseconds
+              var date1_ms = date1.getTime();
+              var date2_ms = date2.getTime();
+
+              // Calculate the difference in milliseconds
+              var difference_ms = date2_ms - date1_ms;
+                
+              // Convert back to days and return
+              return Math.round(difference_ms/one_day); 
+            }
+
+            var daysAndHoursBetween = function(date1, date2) {
+                var daysBetween = Date.daysBetween(date1, date2);
+                var remainingHours = ((date2.getTime() - date1.getTime())/(1000*60*60)) % 24;
+                //console.log((date2.getTime() - date1.getTime())/(1000*60*60));
+
+                return daysBetween + ' days, ' + Math.round(remainingHours) + ' hours';
+
+            }
+          </script>
+
+        <script id="template" type="text/x-kendo-template">
+            #var uid = target.attr("data-uid");#
+            #var scheduler = target.closest("[data-role=scheduler]").data("kendoScheduler");#
+            #var model = scheduler.occurrenceByUid(uid);#
+           
+            #if(model) {#
+                Title: #=model.title#<br/>
+                Description: #=model.description#<br />
+                Start: #=kendo.format('{0:d}',model.start)#<br />
+                End: #=kendo.format('{0:d}',model.end)#<br />
+            #} else {#
+                <strong>No event data is available</strong>
+            #}#
+        </script>
+
+        <script id="event-template" type="text/x-kendo-template">
+            # var color = expired === true ? "\#898989" : "\#39b54a"; #
+            <div onclick="window.location.replace('./page2.html');" style="cursor: pointer; 
+            margin-left:5px;margin-top:2px;font-size:13px;font-weight:300;">
+                #: title #<br/>#: daysAndHoursBetween(start, end) #
+                <input type="hidden" name="event-bgcolor" value="#: color #" />
+
+                <!--#: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #-->
+            </div>
+        </script>
+
+        <script>
+
+        $(document).ready(function() {
+            var doOnce = 0;
+
+            var data = [
+                {"MeetingID":2,"RoomID":1,"Attendees":[1],"Title":"Client A - Job 1","Description":"Well A","StartTimezone":null,"Start":"2013-06-14T12:25:43.511Z","End":"2013-06-26T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":false},
+                {"MeetingID":3,"RoomID":2,"Attendees":[1],"Title":"Client B - Job 2","Description":"Well B","StartTimezone":null,"Start":"2013-06-14T06:25:43.511Z","End":"2013-06-23T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":false},
+                {"MeetingID":4,"RoomID":1,"Attendees":[1],"Title":"Client C - Job 3","Description":"","StartTimezone":null,"Start":"2013-06-24T10:25:43.511Z","End":"2013-07-07T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":true},
+                {"MeetingID":5,"RoomID":2,"Attendees":[1],"Title":"Client D - Job 4","Description":"","StartTimezone":null,"Start":"2013-06-26T07:30:43.511Z","End":"2013-07-10T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":true},
+                {"MeetingID":6,"RoomID":3,"Attendees":[1],"Title":"Client E - Job 4","Description":"","StartTimezone":null,"Start":"2013-06-01T18:00:43.511Z","End":"2013-06-12T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":true},
+                {"MeetingID":7,"RoomID":4,"Attendees":[1],"Title":"Client F - Job 4","Description":"","StartTimezone":null,"Start":"2013-06-01T6:15:43.511Z","End":"2013-08-12T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":false},
+                {"MeetingID":8,"RoomID":5,"Attendees":[1],"Title":"Client G - Job 1","Description":"Well A","StartTimezone":null,"Start":"2013-06-14T12:25:43.511Z","End":"2013-06-26T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":false},
+                {"MeetingID":9,"RoomID":5,"Attendees":[1],"Title":"Client H - Job 2","Description":"Well B","StartTimezone":null,"Start":"2013-06-14T06:25:43.511Z","End":"2013-06-23T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":false},
+                {"MeetingID":10,"RoomID":6,"Attendees":[1],"Title":"Client I - Job 3","Description":"","StartTimezone":null,"Start":"2013-06-24T10:25:43.511Z","End":"2013-07-07T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":true},
+                {"MeetingID":11,"RoomID":6,"Attendees":[1],"Title":"Client J - Job 4","Description":"","StartTimezone":null,"Start":"2013-06-26T07:30:43.511Z","End":"2013-07-10T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":true},
+                {"MeetingID":12,"RoomID":7,"Attendees":[1],"Title":"Client K - Job 4","Description":"","StartTimezone":null,"Start":"2013-06-01T18:00:43.511Z","End":"2013-06-12T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":true},
+                {"MeetingID":13,"RoomID":7,"Attendees":[1],"Title":"Client L - Job 4","Description":"","StartTimezone":null,"Start":"2013-06-01T6:15:43.511Z","End":"2013-08-12T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":false},
+                {"MeetingID":13,"RoomID":8,"Attendees":[1],"Title":"Client L - Job 4","Description":"","StartTimezone":null,"Start":"2013-06-01T6:15:43.511Z","End":"2013-08-12T18:25:43.511Z","EndTimezone":null,"RecurrenceRule":null,"RecurrenceID":null,"RecurrenceException":null,"IsAllDay":false,"Expired":false}
+                ];
+
+            $(function () {
+                
+            });
+
+            $("#scheduler").kendoScheduler({
+                date: new Date("2013/05/15"),
+                eventTemplate: $("#event-template").html(),
+                dateHeaderTemplate: kendo.template("<span class='calendar-header1'>#=kendo.toString(date, 'MMM')#</span><br/><span class='calendar-header2'>#=kendo.toString(date, ' d')#</span>"),
+                majorTimeHeaderTemplate: kendo.template("<h6>#=kendo.toString(date, 'H:mm')#</h6>"),
+                startTime: new Date("2013/09/13 07:00 AM"),
+                //endTime: new Date("2013/10/13 07:00 AM"),
+                //height: 700,
+                width: "99.5%",
+              	editable: false,
+                views: [
+                  { 
+                    type: "kendo.ui.SchedulerTimelineYearView", //"timelineMonth",
+                    title: "Year", 
+                    majorTick: 1440, 
+                    minorTickCount: 1,
+                    columnWidth: 38,
+                    eventHeight: 40,
+                    group: {
+                        date: true
+                    }
+                  },
+                ],
+                timezone: "Etc/UTC",
+              	dataBinding: function(e) {
+                    kendo.ui.progress($("#scheduler"), true);
+                },
+                dataBound: function(e) {
+                    kendo.ui.progress($("#scheduler"), false);
+                    //console.log("dataBound");
+                    //hide the times row from the date/time header:
+                    var view = this.view();
+                    view.datesHeader.find("tr:last").prev().hide();
+                    view.timesHeader.find("tr:last").prev().hide();
+
+                    $("#scheduler").kendoTooltip({
+                        filter: ".k-event",
+                        position: "bottom",
+                        width: 250,
+                        content: kendo.template($('#template').html())
+                    });
+
+                    $("#scheduler > table > tbody > tr:nth-child(2) > td:nth-child(1) > div > table > tbody > tr:nth-child(2)").click(function() {
+                        //window.location.replace('./charts2.html');
+                    });
+
+                    $("#scheduler > table > tbody > tr:nth-child(1) > td:nth-child(1) > div > table > tbody > tr:nth-child(1) > th")
+                    .css('height', '32px')
+                    .html("Crew")
+                    .css('border-right-width', '1px')
+                    .css('border-right-color', '#fff')
+                    .css('border-top-width', '8px')
+                    .css('border-top-color', 'black')
+                    ;
+
+                    $("#scheduler > table > tbody > tr:nth-child(1) > td:nth-child(2) > div > div > table > tbody > tr:nth-child(1) > th:nth-child(n)")
+                    .css('border-top-width', '8px')
+                    .css('border-top-color','black')
+                    //.css('border-left-width', '1px')
+                    //.css('border-left-color','white')
+                    .css('height','32px')
+                    ;
+
+                    $("#scheduler > div > ul > li.k-state-default.k-header.k-nav-prev > a > span").remove();
+
+                    $("#scheduler > div > ul > li.k-state-default.k-header.k-nav-next > a > span").remove();
+
+                    $(".k-event-actions").remove();
+
+                    if(doOnce == 0) {
+                        $("#scheduler > div > ul > li.k-state-default.k-header.k-nav-today").after("<li class='k-state-default k-header k-nav-today'><img src='btn_divider_20x84.png'/></li>");
+
+                        $("#scheduler > div > ul > li.k-state-default.k-header.k-nav-prev").after("<li class='k-state-default k-header k-nav-today'><img src='btn_divider_20x84.png'/></li>");
+
+                        doOnce = 1;    
+                    }
+
+                    $("input:hidden").each(function() {
+                    //console.log($(this).parent().parent());
+                        $(this).parent().parent().css("background-color", this.value).css("border-color", this.value);
+                    });
+                    
+                    $("#EST2press-log").kendoChart({
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+
+                    /*$("#STX2press-log").kendoSparkline({
+                        series: [{
+                            type: "line",
+                            zIndex: 1,
+                            size: "5px",
+                            color: "grey",
+                            data: [
+                                1004, 988, 990, 988, 987, 995, 946, 954, 991,
+                                936, 968, 1025, 999, 998, 1014, 1017, 1010, 1010,
+                            ],
+                            width : 2
+                        }]
+                    });
+                    */
+
+                    $("#EST3press-log").kendoChart({
+                        chartArea: {
+                            background: "transparent"
+                        },
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+
+                    $("#STX3press-log").kendoChart({
+                        chartArea: {
+                            background: "transparent"
+                        },
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+
+                    $("#STX4press-log").kendoChart({
+                        chartArea: {
+                            background: "transparent"
+                        },
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+
+                    $("#STX5press-log").kendoChart({
+                        chartArea: {
+                            background: "transparent"
+                        },
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+
+                    $("#STX6press-log").kendoChart({
+                        chartArea: {
+                            background: "transparent"
+                        },
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+
+                    $("#STX7press-log").kendoChart({
+                        chartArea: {
+                            background: "transparent"
+                        },
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+
+                    $("#STX8press-log").kendoChart({
+                        chartArea: {
+                            background: "transparent"
+                        },
+                        title: {
+                            text: "March Weather Report",
+                            visible: false
+                        },
+                        legend: {
+                            position: "bottom",
+                            visible: false
+                        },
+                        series: [{
+                            type: "line",
+                            data: [1000, 1100, 100, 500, 600, 700, 800, 900, 1000, 1100],
+                            name: "Pressure",
+                            color: "#ff1c1c",
+                            axis: "pressure",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [100, 100, 100, 150, 175, 175, 175, 175, 175, 175],
+                            name: "Temperature",
+                            color: "#ffae00",
+                            axis: "temperature",
+                            markers: {
+                              visible: false
+                            },
+                        }, {
+                            type: "line",
+                            data: [16.4, 21.7, 35.4, 19, 10.9, 13.6, 10.9, 10.9, 10.9, 16.4],
+                            name: "Flow",
+                            color: "#73c100",
+                            axis: "flow",
+                            markers: {
+                              visible: false
+                            },
+                        }],
+                        valueAxes: [{
+                            name: "pressure",
+                            min: 0,
+                            max: 2000,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "temperature",
+                            color: "#007eff",
+                            min: 0,
+                            max: 200,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }, {
+                            name: "flow",
+                            color: "#73c100",
+                            min: 0,
+                            max: 60,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            }
+                        }],
+                        categoryAxis: {
+                            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                            // Align the first two value axes to the left
+                            // and the last two to the right.
+                            //
+                            // Right alignment is done by specifying a
+                            // crossing value greater than or equal to
+                            // the number of categories.
+                            axisCrossingValues: [32, 32, 0],
+                            justified: true,
+                            visible: false,
+                            majorGridLines: {
+                              visible: false
+                            },
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}",
+                            template: "#= category #/03: #= value #"
+                        }
+                    });
+                },
+                dataSource: {
+                    batch: true,
+                    transport: {
+                        
+                        read: function(request) {
+                            var newData = JSON.parse(JSON.stringify(data));
+                            request.success(newData);
+                        }
+                        
+                        /*
+                        read: {
+                            url: "http://demos.telerik.com/kendo-ui/service/meetings",
+                            dataType: "jsonp"
+                        },
+                        update: {
+                            url: "//demos.telerik.com/kendo-ui/service/meetings/update",
+                            dataType: "jsonp"
+                        },
+                        create: {
+                            url: "//demos.telerik.com/kendo-ui/service/meetings/create",
+                            dataType: "jsonp"
+                        },
+                        destroy: {
+                            url: "//demos.telerik.com/kendo-ui/service/meetings/destroy",
+                            dataType: "jsonp"
+                        },
+                        parameterMap: function(options, operation) {
+                            if (operation !== "read" && options.models) {
+                                return {models: kendo.stringify(options.models)};
+                            }
+                        }
+                        */
+                    },
+                    schema: {
+                        model: {
+                            id: "meetingID",
+                            fields: {
+                                meetingID: { from: "MeetingID", type: "number" },
+                                title: { from: "Title", defaultValue: "No title", validation: { required: true } },
+                                start: { type: "date", from: "Start" },
+                                end: { type: "date", from: "End" },
+                                startTimezone: { from: "StartTimezone" },
+                                endTimezone: { from: "EndTimezone" },
+                                description: { from: "Description" },
+                                recurrenceId: { from: "RecurrenceID" },
+                                recurrenceRule: { from: "RecurrenceRule" },
+                                recurrenceException: { from: "RecurrenceException" },
+                                roomId: { from: "RoomID", nullable: true },
+                                attendees: { from: "Attendees", nullable: true },
+                                isAllDay: { type: "boolean", from: "IsAllDay" },
+                                expired: {type: "boolean", from: "Expired"}
+                            }
+                        }
+                    }
+                },
+                group: {
+                    resources: ["Rooms"],
+                    orientation: "vertical"
+                },
+                resources: [
+                    {
+                        field: "roomId",
+                        name: "Rooms",
+                        dataSource: [
+                            { text: "EST2", value: 1 },
+                            { text: "EST3", value: 2 },
+                            { text: "STX3", value: 3},
+                            { text: "STX4", value: 4},
+                            { text: "STX5", value: 5 },
+                            { text: "STX6", value: 6 },
+                            { text: "STX7", value: 7},
+                            { text: "STX8", value: 8}                        ],
+                        title: "Room"
+                    },
+                    {
+                        field: "attendees",
+                        name: "Attendees",
+                        dataSource: [
+                            //{ text: "STX1-C", value: 1, color: "#f8a398" },
+                            //{ text: "STX2-C", value: 2, color: "#51a0ed" },
+                            //{ text: "Charlie", value: 3, color: "#56ca85" }
+                        ],
+                        multiple: true,
+                        title: "Attendees"
+                    }
+                ],
+                footer: false,
+                currentTimeMarker: false
+            });
+        });
+
+        </script>
+    </body>
+</html>
